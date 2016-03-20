@@ -84,12 +84,13 @@ def depthFirstSearch(problem):
     while not stack.isEmpty():
         proximos = problem.getSuccessors(stack.pop())
         for item in proximos:
-            if item[0] not in visited:
+            if not item[0] in visited:
+                if problem.isGoalState(item[0]):
+                    return path + [item[1]]
                 visited.append(item[0])
                 stack.push(item[0])
                 path.append(item[1])
-
-    print path
+    return []
 
 
 def breadthFirstSearch(problem):
