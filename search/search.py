@@ -70,49 +70,40 @@ def tinyMazeSearch(problem):
 
 
 def depthFirstSearch(problem):
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-
-
-    "*** YOUR CODE HERE ***"
     stack = util.Stack()
-    start = problem.getStartState()
-    visited = [start, ]
-    path = []
-    stack.push(start)
+    visited = []
+    stack.push((problem.getStartState(), []))
     while not stack.isEmpty():
-        proximos = problem.getSuccessors(stack.pop())
-        for item in proximos:
-            if not item[0] in visited:
-                if problem.isGoalState(item[0]):
-                    return path + [item[1]]
-                visited.append(item[0])
-                stack.push(item[0])
-                path.append(item[1])
+        estado, caminho = stack.pop()
+
+        if problem.isGoalState(estado):
+            return caminho
+
+        if not estado in visited:
+            visited.append(estado)
+            proximos = problem.getSuccessors(estado)
+            for item in proximos:
+                stack.push((item[0], caminho + [item[1]]))
     return []
 
 
 def breadthFirstSearch(problem):
     "Search the shallowest nodes in the search tree first. [p 81]"
     "*** YOUR CODE HERE ***"
-    node = problem.getStartState()
-    if problem.isGoalState(node):
-        return node
-    frontier = util.Queue()
-    frontier.push(node)
-    explored = []
-    path = []
-    while not frontier.isEmpty():
-        children = problem.getSuccessors(frontier.pop())
-        for child in children:
-            if not child[0] in explored:
-                if problem.isGoalState(child[0]):
-                    return path + [child[1]]
-                explored.append(child[0])
-                frontier.push(child[0])
-                path.append(child[1])
+    queue = util.Queue()
+    visited = []
+    queue.push((problem.getStartState(), []))
+    while not queue.isEmpty():
+        estado, caminho = queue.pop()
+
+        if problem.isGoalState(estado):
+            return caminho
+
+        if not estado in visited:
+            visited.append(estado)
+            proximos = problem.getSuccessors(estado)
+            for item in proximos:
+                queue.push((item[0], caminho + [item[1]]))
     return []
 
 def uniformCostSearch(problem):
