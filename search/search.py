@@ -108,8 +108,21 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.PriorityQueue()
+    visited = []
+    queue.push((problem.getStartState(), []), 0)
+    while not queue.isEmpty():
+        estado, caminho = queue.pop()
+
+        if problem.isGoalState(estado):
+            return caminho
+
+        if not estado in visited:
+            visited.append(estado)
+            proximos = problem.getSuccessors(estado)
+            for item in proximos:
+                queue.push((item[0], caminho + [item[1]]), problem.getCostOfActions(caminho + [item[1]]))
+    return []
 
 
 def nullHeuristic(state, problem=None):
@@ -121,9 +134,22 @@ def nullHeuristic(state, problem=None):
 
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    "Search the node that has the lowest combined cost and heuristic first."
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.PriorityQueue()
+    visited = []
+    queue.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
+    while not queue.isEmpty():
+        estado, caminho = queue.pop()
+
+        if problem.isGoalState(estado):
+            return caminho
+
+        if not estado in visited:
+            visited.append(estado)
+            proximos = problem.getSuccessors(estado)
+            for item in proximos:
+                queue.push((item[0], caminho + [item[1]]),
+                           problem.getCostOfActions(caminho + [item[1]]) + heuristic(item[0], problem))
+    return []
 
 
 # Abbreviations
